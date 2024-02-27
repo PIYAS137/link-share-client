@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.custom-anchor::before {
+    content: '';
+    display: inline-block;
+    width: 12px; /* adjust size as needed */
+    height: 12px; /* adjust size as needed */
+    margin-right: 0.5rem; /* adjust spacing as needed */
+    border-radius: 50%;
+}
+
+.custom-anchor:before {
+    content: '';
+    background-color: red;
+}
+
+.custom-anchor:visited:before {
+    background-color: rgb(0, 169, 0);
+}
