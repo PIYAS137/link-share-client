@@ -4,6 +4,7 @@ import { NavLink,useNavigate } from 'react-router-dom'
 import { FirebaseSignUp } from "../Redux/Features/userSlice";
 import { useEffect } from "react";
 import Swal from 'sweetalert2';
+import { useCreateUserMutation, useUpdateUserRoleMutation } from "../Redux/API/baseApi";
 
 
 const SignUpPage = () => {
@@ -11,6 +12,8 @@ const SignUpPage = () => {
     const dispatch = useDispatch();
     const { error, isError, email } = useSelector(state => state.user);
     const navigate = useNavigate();
+    const [setFunc,{data : finalData}]=useCreateUserMutation();
+
 
 
     const {
@@ -26,6 +29,13 @@ const SignUpPage = () => {
             photo : data.photo,
             password : data.password
         }))
+        const userInfo={
+            name : data.name,
+            email : data.email,
+            photo : data.photo,
+            role : 'user'
+        }
+        setFunc(userInfo);
     }
 
 

@@ -3,20 +3,25 @@ import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, Link } from 'react-router-dom';
 import { signoutUser } from '../Redux/Features/userSlice';
 import { FirebaseAuth } from '../Firebase/firebase.config';
+import { useCheckAdminQuery } from '../Redux/API/baseApi';
 
 
 const AppNavbar = () => {
 
     const { email } = useSelector(state => state.user);
     const dispatch = useDispatch();
+    const { data: adminStatus } = useCheckAdminQuery(email);
+    console.log(adminStatus);
 
     const navLinks = <>
         <li><NavLink to='/'>Homepage</NavLink></li>
-        <li><NavLink to='/dashboard'>Dashboard</NavLink></li>
+        {
+            adminStatus && <li><NavLink to='/dashboard'>Dashboard</NavLink></li>
+        }
         <li><NavLink to='/login'>Login</NavLink></li>
     </>
 
-    const handleSignout=()=>{
+    const handleSignout = () => {
         signOut(FirebaseAuth);
         dispatch(signoutUser());
     }
@@ -28,7 +33,7 @@ const AppNavbar = () => {
                     <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
                     </div>
-                    <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+                    <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-gray-900 rounded-box w-52">
                         {navLinks}
                     </ul>
                 </div>
