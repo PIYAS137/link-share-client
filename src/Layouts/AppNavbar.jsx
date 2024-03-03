@@ -8,17 +8,15 @@ import { useCheckAdminQuery } from '../Redux/API/baseApi';
 
 const AppNavbar = () => {
 
-    const { email } = useSelector(state => state.user);
+    const { email, profilePhotoURL } = useSelector(state => state.user);
     const dispatch = useDispatch();
     const { data: adminStatus } = useCheckAdminQuery(email);
-    console.log(adminStatus);
 
     const navLinks = <>
         <li><NavLink to='/'>Homepage</NavLink></li>
         {
             adminStatus && <li><NavLink to='/dashboard'>Dashboard</NavLink></li>
         }
-        <li><NavLink to='/login'>Login</NavLink></li>
     </>
 
     const handleSignout = () => {
@@ -45,6 +43,14 @@ const AppNavbar = () => {
                 </ul>
             </div>
             <div className="navbar-end">
+                {
+                    profilePhotoURL &&
+                    <div className="avatar online mr-3">
+                        <div className="w-12 rounded-full">
+                            <img src={profilePhotoURL} />
+                        </div>
+                    </div>
+                }
                 {
                     email ? <button onClick={handleSignout} className="btn btn-error text-white">Logout</button>
                         :

@@ -7,6 +7,7 @@ import SignUpPage from '../Pages/SignUpPage';
 import ProtectedRoute from '../Private/ProtectedRoute';
 import DashboardPage from '../Pages/DashboardPage';
 import TempProtect from '../Private/TempProtect';
+import EditLink from '../Pages/EditLink';
 
 const router = createBrowserRouter([
     {
@@ -20,6 +21,11 @@ const router = createBrowserRouter([
             {
                 path : '/dashboard',
                 element : <ProtectedRoute><DashboardPage/></ProtectedRoute>
+            },
+            {
+                path : '/edit/:sid',
+                loader : ({params})=>fetch(`https://link-share-server.vercel.app/one/${params.sid}`),
+                element : <EditLink/>
             }
         ]
     },

@@ -1,6 +1,11 @@
+import { useGetAllLinksQuery } from "../Redux/API/baseApi"
 
 
 const HomePage = () => {
+
+  const {data : datas} = useGetAllLinksQuery();
+
+
   return (
     <div>
       
@@ -11,9 +16,9 @@ const HomePage = () => {
       <h1 className="  text-center mb-5 font-bold text-3xl uppercase border-b border-gray-600 max-w-xl mx-auto pb-2">Links </h1>
 
       <div className=" w-fit mx-auto">
-        <a href="https://www.twitter.com" target="_blank" className="custom-anchor hover:text-blue-400 cursor-pointer block text-white mt-3">Twitter </a>
-        <a href="https://www.youtube.com" target="_blank" className="custom-anchor hover:text-blue-400 cursor-pointer block text-whit mt-3">Youtube </a>
-        <a href="https://www.pink.com" target="_blank" className="custom-anchor hover:text-blue-400 cursor-pointer block text-white mt-3">Pink </a>
+        {
+          datas?.map((one)=><a key={one?._id} href={one?.url} target="_blank" className="custom-anchor hover:text-blue-400 cursor-pointer block text-white mt-3">{one?.text} </a>)
+        }
       </div>
 
     </div>

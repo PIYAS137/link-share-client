@@ -1,19 +1,24 @@
+import { Link } from "react-router-dom";
 import AddLink from "../Components/AddLink"
-import { useGetAllUserQuery, useUpdateUserRoleMutation } from "../Redux/API/baseApi"
+import {  useDeleteLinkMutation, useGetAllLinksQuery, useGetAllUserQuery, useUpdateUserRoleMutation } from "../Redux/API/baseApi"
 
 const DashboardPage = () => {
 
   const { data: datas } = useGetAllUserQuery();
-  const [setUserRole,{data : updatedRoleData}] = useUpdateUserRoleMutation();
-  console.log(updatedRoleData);
-  
-  console.log(datas);
-  const handleClickUpdateUserRole=(uid)=>{
-    const updatedInfo={
-      uid : uid,
-      status : 'admin'
+  const [setUserRole, { data: updatedRoleData }] = useUpdateUserRoleMutation();
+  const { data: links } = useGetAllLinksQuery();
+  const [setDeleteFunc,{data : finalDel}] = useDeleteLinkMutation();
+
+  const handleClickUpdateUserRole = (uid) => {
+    const updatedInfo = {
+      uid: uid,
+      status: 'admin'
     }
     setUserRole(updatedInfo);
+  }
+
+  const handleClickDeleteLink=(sid)=>{
+    setDeleteFunc(sid)
   }
 
 
@@ -54,7 +59,7 @@ const DashboardPage = () => {
                         <td>
                           {
                             one?.role == 'user' ?
-                              <button onClick={()=>handleClickUpdateUserRole(one?._id)} className=" btn btn-xs bg-blue-400 hover:bg-blue-500 text-white border-none">make admin</button>
+                              <button onClick={() => handleClickUpdateUserRole(one?._id)} className=" btn btn-xs bg-blue-400 hover:bg-blue-500 text-white border-none">make admin</button>
                               :
                               <span className=" text-purple-500 font-semibold italic">admin</span>
                           }
@@ -70,7 +75,7 @@ const DashboardPage = () => {
         <div className=" p-3">
           <h1 className=" text-center font-bold text-2xl uppercase mb-3 text-blue-400">Links</h1>
           <div className="overflow-x-auto">
-            <table className="table table-zebra border-x border-t">
+            <table className="table border">
               {/* head */}
               <thead>
                 <tr className=" text-white">
@@ -80,16 +85,20 @@ const DashboardPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {/* row 1 */}
-                <tr>
-                  <th>1 )</th>
-                  <td>Cy Ganderton</td>
-                  <td className=" space-x-2">
-                    <button className=" btn btn-xs btn-primary">Edit</button>
-                    <button className=" btn btn-xs btn-warning">View</button>
-                    <button className=" btn btn-xs btn-error text-white">Delete</button>
-                  </td>
-                </tr>
+                {
+                  links?.map((one, i) => {
+                    return (
+                      <tr key={one?._id}>
+                        <th>{i+1} )</th>
+                        <td>{one?.text}</td>
+                        <td className=" space-x-2">
+                          <Link to={`/edit/${one?._id}`}><button className=" btn btn-xs btn-primary">Edit</button></Link>
+                          <button onClick={()=>handleClickDeleteLink(one?._id)} className=" btn btn-xs btn-error text-white">Delete</button>
+                        </td>
+                      </tr>
+                    )
+                  })
+                }
               </tbody>
             </table>
           </div>
